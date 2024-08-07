@@ -15,6 +15,9 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+jwt:
+  secret: RTUnks7vJZtUtzfKj5KezFroHqk8tkZeBCqnKZaBnSuBLnUCFKDdngrNbDqAPxCe
+  expiration-time: 3600000 # 1시간
 decorator:
   datasource:
     p6spy:
