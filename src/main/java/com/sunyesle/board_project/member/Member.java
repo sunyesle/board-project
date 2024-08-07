@@ -19,13 +19,17 @@ public class Member {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
     protected Member() {
     }
 
-    public Member(String email, String password, String name, String phoneNumber) {
+    public Member(String email, String password, String name, String phoneNumber, MemberRole role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }

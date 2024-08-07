@@ -17,7 +17,8 @@ public class MemberService {
                 request.getEmail(),
                 request.getPassword(),
                 request.getName(),
-                request.getPhoneNumber()
+                request.getPhoneNumber(),
+                MemberRole.USER
         );
         memberRepository.save(member);
         return new CreateResponse(member.getId());
