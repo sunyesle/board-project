@@ -23,5 +23,6 @@ decorator:
     p6spy:
       enable-logging : true
 springdoc:
+  show-login-endpoint: true
   swagger-ui:
     path: "swagger-ui"
