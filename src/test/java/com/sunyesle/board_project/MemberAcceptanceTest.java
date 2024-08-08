@@ -12,6 +12,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -41,7 +43,7 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
         String email = "test@gamil.com";
         String name = "테스트";
         String phoneNumber = "010-0000-0000";
-        String password = "Test1234!@";
+        String password = "Test12345!@";
         MemberRequest memberRequest = new MemberRequest(email, name, phoneNumber, password);
 
         // when
@@ -76,7 +78,7 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
         String email = "test@gamil.com";
         String name = "테스트";
         String phoneNumber = "010-0000-0000";
-        String password = "Test1234!@";
+        String password = "Test12345!@";
         회원가입_요청(new MemberRequest(email, name, phoneNumber, password));
 
         LoginRequest loginRequest = new LoginRequest(email, password);
