@@ -1,5 +1,7 @@
 package com.sunyesle.board_project.common.security;
 
+import com.sunyesle.board_project.common.exception.ErrorCodeException;
+import com.sunyesle.board_project.common.exception.MemberErrorCode;
 import com.sunyesle.board_project.member.Member;
 import com.sunyesle.board_project.member.MemberRepository;
 import jakarta.servlet.FilterChain;
@@ -33,7 +35,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         if (token != null || jwtTokenProvider.validateToken(token)) {
             Long userId = jwtTokenProvider.getMemberId(token);
             Member member = memberRepository.findById(userId)
-                    .orElseThrow(() -> new UsernameNotFoundException("MEMBER_NOT_FOUND"));
+                    .orElseThrow(() -> new ErrorCodeException(MemberErrorCode.MEMBER_NOT_FOUND));
 
             UserDetails userDetails = new CustomUserDetails(member);
 
