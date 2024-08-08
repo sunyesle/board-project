@@ -20,6 +20,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(ErrorResponse.of("METHOD_ARGUMENT_NOT_VALID", "유효성 검증 실패", ex));
     }
 
+    @ExceptionHandler(ErrorCodeException.class)
+    public ResponseEntity<ErrorResponse> handleErrorCodeException(ErrorCodeException e) {
+        ErrorCode errorCode = e.getErrorCode();
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponse.of(errorCode));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e){
         return ResponseEntity

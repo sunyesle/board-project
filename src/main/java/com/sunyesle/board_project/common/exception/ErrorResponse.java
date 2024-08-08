@@ -29,6 +29,12 @@ public class ErrorResponse {
                 .fieldErrors(FieldErrorDto.of(bindException)).build();
     }
 
+    public static ErrorResponse of(ErrorCode errorCode){
+        return ErrorResponse.builder()
+                .code(errorCode.name())
+                .message(errorCode.getMessage()).build();
+    }
+
     @Getter
     public static class FieldErrorDto{
         private final String field;
