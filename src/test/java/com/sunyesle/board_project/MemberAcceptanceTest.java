@@ -57,6 +57,24 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
         assertThat(savedMember).isPresent();
     }
 
+    @DisplayName("중복된 이메일로 회원가입 요청을하면 409를 반환한다")
+    @Test
+    void signupEmailDuplicate() {
+        // given
+        String email = "test@gamil.com";
+        String name = "테스트";
+        String phoneNumber = "010-0000-0000";
+        String password = "Test12345!@";
+        MemberRequest memberRequest = new MemberRequest(email, name, phoneNumber, password);
+        회원가입_요청(memberRequest);
+
+        // when
+        ExtractableResponse<Response> response = 회원가입_요청(memberRequest);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
+    }
+
     @SneakyThrows
     private ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
         return RestAssured
