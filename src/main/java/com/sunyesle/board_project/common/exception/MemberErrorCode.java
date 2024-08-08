@@ -3,7 +3,8 @@ package com.sunyesle.board_project.common.exception;
 import org.springframework.http.HttpStatus;
 
 public enum MemberErrorCode implements ErrorCode {
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원정보가 존재하지 않습니다.");
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원정보가 존재하지 않습니다."),
+    MEMBER_EMAIL_DUPLICATE(HttpStatus.CONFLICT, "중복된 이메일이 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
