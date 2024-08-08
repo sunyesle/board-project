@@ -1,11 +1,12 @@
 package com.sunyesle.board_project.member;
 
+import com.sunyesle.board_project.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
 @Entity
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
