@@ -58,7 +58,6 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         accessToken = 로그인_요청(loginRequest).header("access_token");
     }
 
-    @SneakyThrows
     @DisplayName("게시글을 작성한다")
     @Test
     void saveBoard() {
@@ -78,7 +77,32 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         assertThat(savedBoard).isPresent();
     }
 
-    private ExtractableResponse<Response> 게시글_작성_요청(BoardRequest boardRequest) throws JsonProcessingException {
+    @SneakyThrows
+    @DisplayName("인증 없이 게시글을 작성하면 401을 반환한다")
+    @Test
+    void saveBoardWithoutAuthentication() {
+        // given
+        String title = "테스트 게시글";
+        String content = "테스트 내용";
+        BoardRequest boardRequest = new BoardRequest(title, content);
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                    .basePath("/api/v1/boards")
+                    .contentType(ContentType.JSON)
+                    .body(objectMapper.writeValueAsString(boardRequest))
+                .when()
+                    .post()
+                .then().log().all()
+                    .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @SneakyThrows
+    private ExtractableResponse<Response> 게시글_작성_요청(BoardRequest boardRequest) {
         return RestAssured
                 .given().log().all()
                     .basePath("/api/v1/boards")
