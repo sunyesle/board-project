@@ -1,8 +1,6 @@
 package com.sunyesle.board_project.common.config;
 
-import com.sunyesle.board_project.common.security.JwtAuthenticationFilter;
-import com.sunyesle.board_project.common.security.JwtLoginFilter;
-import com.sunyesle.board_project.common.security.JwtTokenProvider;
+import com.sunyesle.board_project.common.security.*;
 import com.sunyesle.board_project.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -67,6 +65,10 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterAt(new JwtLoginFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtTokenProvider, memberRepository), BasicAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
         ;
         return http.build();
     }
