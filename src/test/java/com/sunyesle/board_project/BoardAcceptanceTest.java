@@ -1,15 +1,13 @@
 package com.sunyesle.board_project;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sunyesle.board_project.board.Board;
-import com.sunyesle.board_project.board.BoardRepository;
-import com.sunyesle.board_project.board.BoardRequest;
+import com.sunyesle.board_project.board.*;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.MemberRequest;
 import com.sunyesle.board_project.support.BaseAcceptanceTest;
+import com.sunyesle.board_project.support.BoardSteps;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
@@ -22,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.sunyesle.board_project.support.BoardSteps.게시글_작성_요청;
 import static com.sunyesle.board_project.support.MemberSteps.로그인_요청;
 import static com.sunyesle.board_project.support.MemberSteps.회원가입_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,7 +67,7 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         BoardRequest boardRequest = new BoardRequest(title, content);
 
         // when
-        ExtractableResponse<Response> response = 게시글_작성_요청(boardRequest);
+        ExtractableResponse<Response> response = 게시글_작성_요청(boardRequest, accessToken);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -99,19 +99,5 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-    }
-
-    @SneakyThrows
-    private ExtractableResponse<Response> 게시글_작성_요청(BoardRequest boardRequest) {
-        return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards")
-                    .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .body(objectMapper.writeValueAsString(boardRequest))
-                .when()
-                    .post()
-                .then().log().all()
-                    .extract();
     }
 }
