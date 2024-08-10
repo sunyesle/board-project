@@ -42,6 +42,16 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(boards);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBoard(
+            @LoginMember Long loginMemberId,
+            @PathVariable Long id,
+            @Valid @RequestBody BoardRequest request
+    ) {
+        boardService.updateBoard(id, request, loginMemberId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBoard(@LoginMember Long loginMemberId, @PathVariable Long id) {
         boardService.deleteBoard(id, loginMemberId);

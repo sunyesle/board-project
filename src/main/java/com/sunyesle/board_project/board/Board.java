@@ -32,4 +32,9 @@ public class Board extends BaseEntity {
     public void setDeletedAt() {
         this.deletedAt = LocalDateTime.now();
     }
+
+    public void update(BoardRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+    }
 }

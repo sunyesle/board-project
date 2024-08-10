@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
@@ -59,5 +61,22 @@ public class BoardService {
         }
 
         board.setDeletedAt();
+    }
+
+    public void updateBoard(Long id, BoardRequest request, Long loginMemberId) {
+        Board board = boardRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
+
+        // 로그인한 회원이 게시글의 작성자가 아니면 예외를 던진다.
+        if (!board.getMemberId().equals(loginMemberId)) {
+            throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
+        }
+
+        // 게시글 작성 후 10일이 지난 경우 예외를 던진다.
+        if (LocalDateTime.now().isAfter(board.getCreatedAt().plusDays(10L))) {
+            throw new ErrorCodeException(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED);
+        }
+
+        board.update(request);
     }
 }
