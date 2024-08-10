@@ -137,4 +137,28 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
+
+    @DisplayName("게시글을 삭제한다")
+    @Test
+    void deleteBoard() {
+        // given
+        String title = "테스트 게시글";
+        String content = "테스트 내용";
+        BoardRequest boardRequest = new BoardRequest(title, content);
+        Long savedBoardId = 게시글_작성_요청(boardRequest, accessToken).as(CreateResponse.class).getId();
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                    .basePath("/api/v1/boards/" + savedBoardId)
+                    .contentType(ContentType.JSON)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .when()
+                    .delete()
+                .then().log().all()
+                    .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
 }
