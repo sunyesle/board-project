@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query(value = "select new com.sunyesle.board_project.board.BoardResponse(b.id, b.title, b.content, b.createdAt, m.id, m.name) " +
@@ -15,4 +17,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                     "where (:title is null or b.title like concat('%', :title, '%'))"
     )
     Page<BoardResponse> findByTitleContains(String title, Pageable pageable);
+
+    Optional<Board> findByIdAndDeletedAtIsNull(Long id);
 }

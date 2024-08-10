@@ -23,6 +23,12 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long id) {
+        BoardResponse board = boardService.getBoard(id);
+        return ResponseEntity.status(HttpStatus.OK).body(board);
+    }
+
     @GetMapping
     public ResponseEntity<Page<BoardResponse>> getBoards(
             @RequestParam(required = false) String title,
@@ -37,7 +43,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBoard(@LoginMember Long loginMemberId, @PathVariable Long id){
+    public ResponseEntity<Void> deleteBoard(@LoginMember Long loginMemberId, @PathVariable Long id) {
         boardService.deleteBoard(id, loginMemberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

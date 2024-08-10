@@ -3,6 +3,9 @@ package com.sunyesle.board_project.board;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.exception.BoardErrorCode;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
+import com.sunyesle.board_project.common.exception.MemberErrorCode;
+import com.sunyesle.board_project.member.Member;
+import com.sunyesle.board_project.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +17,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public CreateResponse saveBoard(BoardRequest request, Long loginMemberId) {
         Board board = new Board(loginMemberId, request.getTitle(), request.getContent());
         boardRepository.save(board);
         return new CreateResponse(board.getId());
+    }
+
+    public BoardResponse getBoard(Long id) {
+        Board board = boardRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
+
+        Member writer = memberRepository.findById(board.getMemberId())
+                .orElseThrow(() -> new ErrorCodeException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        return BoardResponse.of(board, writer);
     }
 
     public Page<BoardResponse> getBoards(String title, Pageable pageable) {

@@ -1,5 +1,6 @@
 package com.sunyesle.board_project.board;
 
+import com.sunyesle.board_project.member.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,17 @@ public class BoardResponse {
         this.content = content;
         this.createdAt = createdAt;
         this.writer = new MemberDto(writerId, writerName);
+    }
+
+    public static BoardResponse of(Board board, Member writer) {
+        return new BoardResponse(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getCreatedAt(),
+                writer.getId(),
+                writer.getName()
+        );
     }
 
     private record MemberDto(Long id, String name) {
