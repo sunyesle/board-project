@@ -7,7 +7,6 @@ import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.MemberRequest;
 import com.sunyesle.board_project.support.BaseAcceptanceTest;
-import com.sunyesle.board_project.support.BoardSteps;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
@@ -75,6 +74,44 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         Long id = response.as(CreateResponse.class).getId();
         Optional<Board> savedBoard = boardRepository.findById(id);
         assertThat(savedBoard).isPresent();
+    }
+
+    @DisplayName("게시글 목록을 조회한다")
+    @Test
+    void getBoards() {
+        // given
+        int totalBoards = 30;
+        for (int i = 0; i < totalBoards; i++) {
+            String title = "테스트 게시글" + i;
+            String content = "테스트 내용" + i;
+            BoardRequest boardRequest = new BoardRequest(title, content);
+            게시글_작성_요청(boardRequest, accessToken);
+        }
+        int pageSize = 20;
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                    .basePath("/api/v1/boards")
+                    .contentType(ContentType.JSON)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .queryParam("title", "게시글")
+                    .queryParam("orderBy", BoardOrderBy.OLDEST)
+                    .queryParam("pageNumber", 0)
+                    .queryParam("pageSize", pageSize)
+                .when()
+                    .get()
+                .then().log().all()
+                    .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        int totalElements = response.jsonPath().getInt("page.totalElements");
+        assertThat(totalElements).isEqualTo(totalBoards);
+
+        List<BoardResponse> boards = response.jsonPath().getList("content", BoardResponse.class);
+        assertThat(boards).hasSize(pageSize);
     }
 
     @SneakyThrows
