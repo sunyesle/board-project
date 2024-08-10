@@ -25,4 +25,16 @@ public class BoardSteps {
                 .then().log().all()
                     .extract();
     }
+
+    @SneakyThrows
+     public static ExtractableResponse<Response> 게시글_조회_요청(Long savedBoardId) {
+        return RestAssured
+                .given().log().all()
+                    .basePath("/api/v1/boards/" + savedBoardId)
+                    .contentType(ContentType.JSON)
+                .when()
+                    .get()
+                .then().log().all()
+                    .extract();
+    }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sunyesle.board_project.support.BoardSteps.게시글_작성_요청;
+import static com.sunyesle.board_project.support.BoardSteps.게시글_조회_요청;
 import static com.sunyesle.board_project.support.MemberSteps.로그인_요청;
 import static com.sunyesle.board_project.support.MemberSteps.회원가입_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +56,22 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         회원가입_요청(memberRequest);
         LoginRequest loginRequest = new LoginRequest(email, password);
         accessToken = 로그인_요청(loginRequest).header("access_token");
+    }
+
+    @DisplayName("게시글을 조회한다")
+    @Test
+    void getBoard() {
+        // given
+        String title = "테스트 게시글";
+        String content = "테스트 내용";
+        BoardRequest boardRequest = new BoardRequest(title, content);
+        Long savedBoardId = 게시글_작성_요청(boardRequest, accessToken).as(CreateResponse.class).getId();
+
+        // when
+        ExtractableResponse<Response> response = 게시글_조회_요청(savedBoardId);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @DisplayName("게시글을 작성한다")
