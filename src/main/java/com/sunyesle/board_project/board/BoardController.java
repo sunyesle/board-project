@@ -35,4 +35,10 @@ public class BoardController {
 
         return ResponseEntity.status(HttpStatus.OK).body(boards);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoard(@LoginMember Long loginMemberId, @PathVariable Long id){
+        boardService.deleteBoard(id, loginMemberId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

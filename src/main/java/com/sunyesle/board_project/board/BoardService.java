@@ -1,16 +1,21 @@
 package com.sunyesle.board_project.board;
 
 import com.sunyesle.board_project.common.dto.CreateResponse;
+import com.sunyesle.board_project.common.exception.BoardErrorCode;
+import com.sunyesle.board_project.common.exception.ErrorCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
 
+    @Transactional
     public CreateResponse saveBoard(BoardRequest request, Long loginMemberId) {
         Board board = new Board(loginMemberId, request.getTitle(), request.getContent());
         boardRepository.save(board);
@@ -22,5 +27,23 @@ public class BoardService {
             return boardRepository.findByTitleContains(null, pageable);
         }
         return boardRepository.findByTitleContains(title, pageable);
+    }
+
+    @Transactional
+    public void deleteBoard(Long id, Long loginMemberId) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
+
+        // 로그인한 회원이 게시글의 작성자가 아니면 예외를 던진다.
+        if (!board.getMemberId().equals(loginMemberId)) {
+            throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
+        }
+
+        // 이미 삭제된 게시글일 경우
+        if (board.getDeletedAt() != null) {
+            return;
+        }
+
+        board.setDeletedAt();
     }
 }

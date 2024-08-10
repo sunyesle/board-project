@@ -4,6 +4,8 @@ import com.sunyesle.board_project.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 public class Board extends BaseEntity {
@@ -25,5 +27,9 @@ public class Board extends BaseEntity {
         this.memberId = memberId;
         this.title = title;
         this.content = content;
+    }
+
+    public void setDeletedAt() {
+        this.deletedAt = LocalDateTime.now();
     }
 }
