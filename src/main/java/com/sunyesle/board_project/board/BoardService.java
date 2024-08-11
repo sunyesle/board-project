@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Transactional(readOnly = true)
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final Clock clock;
 
     @Transactional
     public CreateResponse saveBoard(BoardRequest request, Long loginMemberId) {
@@ -60,7 +62,7 @@ public class BoardService {
             return;
         }
 
-        board.setDeletedAt();
+        board.setDeletedAt(LocalDateTime.now(clock));
     }
 
     public void updateBoard(Long id, BoardRequest request, Long loginMemberId) {
@@ -73,7 +75,7 @@ public class BoardService {
         }
 
         // 게시글 작성 후 10일이 지난 경우 예외를 던진다.
-        if (LocalDateTime.now().isAfter(board.getCreatedAt().plusDays(10L))) {
+        if (LocalDateTime.now(clock).isAfter(board.getCreatedAt().plusDays(10L))) {
             throw new ErrorCodeException(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED);
         }
 
