@@ -77,6 +77,7 @@ public class BoardService {
         board.setDeletedAt(LocalDateTime.now(clock));
     }
 
+    @Transactional
     public void updateBoard(Long id, BoardRequest request, Long loginMemberId) {
         Board board = boardRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
