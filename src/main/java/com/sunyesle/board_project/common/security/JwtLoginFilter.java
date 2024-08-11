@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,12 +46,16 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     // 인증 성공 시 호출
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        // header에 access_token 세팅
         CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
+        response.setHeader("access_token", jwtTokenProvider.createToken(userDetails.getId()));
 
+        // body에 로그인 회원 정보 세팅
         LoginResponse loginResponse = new LoginResponse(userDetails.getId(), userDetails.getUsername());
-
-        response.setHeader("access_token", jwtTokenProvider.createToken(userDetails.getId())); // access_token 반환
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getOutputStream().write(objectMapper.writeValueAsBytes(loginResponse));
     }
 }

@@ -7,11 +7,8 @@ import com.sunyesle.board_project.member.Member;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.MemberRequest;
 import com.sunyesle.board_project.support.BaseAcceptanceTest;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +17,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
+import static com.sunyesle.board_project.support.MemberSteps.로그인_요청;
+import static com.sunyesle.board_project.support.MemberSteps.회원가입_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends BaseAcceptanceTest {
@@ -75,20 +74,6 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 
-    @SneakyThrows
-    private ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
-        return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/members")
-                    .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(memberRequest))
-                .when()
-                   .post()
-                .then().log().all()
-                    .extract();
-    }
-
-    @SneakyThrows
     @DisplayName("로그인을 한다")
     @Test
     void login() {
@@ -102,15 +87,7 @@ class MemberAcceptanceTest extends BaseAcceptanceTest {
         LoginRequest loginRequest = new LoginRequest(email, password);
 
         // when
-        ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/members/login")
-                    .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(loginRequest))
-                .when()
-                    .post()
-                .then().log().all()
-                    .extract();
+        ExtractableResponse<Response> response = 로그인_요청(loginRequest);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());

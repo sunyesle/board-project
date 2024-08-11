@@ -67,7 +67,7 @@ public class JwtTokenProvider {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
-            return authorizationHeader.substring(7);
+            return authorizationHeader.substring(BEARER.length());
         }
         return null;
     }
