@@ -1,5 +1,6 @@
 package com.sunyesle.board_project.board;
 
+import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

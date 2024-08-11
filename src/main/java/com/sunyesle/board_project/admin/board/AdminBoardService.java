@@ -1,5 +1,7 @@
 package com.sunyesle.board_project.admin.board;
 
+import com.sunyesle.board_project.admin.board.dto.AdminBoardRequest;
+import com.sunyesle.board_project.admin.board.dto.AdminBoardResponse;
 import com.sunyesle.board_project.common.exception.BoardErrorCode;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
 import lombok.RequiredArgsConstructor;

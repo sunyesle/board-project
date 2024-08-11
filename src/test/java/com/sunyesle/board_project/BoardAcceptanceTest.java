@@ -2,10 +2,13 @@ package com.sunyesle.board_project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.board.*;
+import com.sunyesle.board_project.board.dto.BoardOrderBy;
+import com.sunyesle.board_project.board.dto.BoardRequest;
+import com.sunyesle.board_project.board.dto.BoardResponse;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.MemberRepository;
-import com.sunyesle.board_project.member.MemberRequest;
+import com.sunyesle.board_project.member.dto.MemberRequest;
 import com.sunyesle.board_project.support.BaseAcceptanceTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

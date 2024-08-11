@@ -2,7 +2,7 @@ package com.sunyesle.board_project.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.common.security.LoginRequest;
-import com.sunyesle.board_project.member.MemberRequest;
+import com.sunyesle.board_project.member.dto.MemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;

@@ -2,7 +2,7 @@ package com.sunyesle.board_project;
 
 import com.sunyesle.board_project.board.Board;
 import com.sunyesle.board_project.board.BoardRepository;
-import com.sunyesle.board_project.board.BoardRequest;
+import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.board.BoardService;
 import com.sunyesle.board_project.common.exception.BoardErrorCode;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;

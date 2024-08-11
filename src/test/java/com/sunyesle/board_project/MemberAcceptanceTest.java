@@ -5,7 +5,7 @@ import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.Member;
 import com.sunyesle.board_project.member.MemberRepository;
-import com.sunyesle.board_project.member.MemberRequest;
+import com.sunyesle.board_project.member.dto.MemberRequest;
 import com.sunyesle.board_project.support.BaseAcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

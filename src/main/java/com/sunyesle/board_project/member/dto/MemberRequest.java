@@ -1,4 +1,4 @@
-package com.sunyesle.board_project.member;
+package com.sunyesle.board_project.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

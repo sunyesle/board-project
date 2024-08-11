@@ -1,5 +1,6 @@
 package com.sunyesle.board_project.admin.board;
 
+import com.sunyesle.board_project.admin.board.dto.AdminBoardRequest;
 import com.sunyesle.board_project.admin.entity.AdminBaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

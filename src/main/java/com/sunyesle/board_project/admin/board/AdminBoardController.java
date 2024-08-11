@@ -1,6 +1,7 @@
 package com.sunyesle.board_project.admin.board;
 
-import com.sunyesle.board_project.common.security.LoginMember;
+import com.sunyesle.board_project.admin.board.dto.AdminBoardRequest;
+import com.sunyesle.board_project.admin.board.dto.AdminBoardResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

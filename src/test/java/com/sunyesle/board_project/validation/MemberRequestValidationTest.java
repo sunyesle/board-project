@@ -1,6 +1,6 @@
 package com.sunyesle.board_project.validation;
 
-import com.sunyesle.board_project.member.MemberRequest;
+import com.sunyesle.board_project.member.dto.MemberRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

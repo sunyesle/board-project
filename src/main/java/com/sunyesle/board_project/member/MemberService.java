@@ -3,6 +3,8 @@ package com.sunyesle.board_project.member;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
 import com.sunyesle.board_project.common.exception.MemberErrorCode;
+import com.sunyesle.board_project.member.dto.MemberRequest;
+import com.sunyesle.board_project.member.dto.MemberRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

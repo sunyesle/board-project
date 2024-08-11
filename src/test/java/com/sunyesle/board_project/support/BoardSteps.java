@@ -1,7 +1,7 @@
 package com.sunyesle.board_project.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sunyesle.board_project.board.BoardRequest;
+import com.sunyesle.board_project.board.dto.BoardRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;

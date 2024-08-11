@@ -1,5 +1,9 @@
 package com.sunyesle.board_project.board;
 
+import com.sunyesle.board_project.board.dto.BoardDetailResponse;
+import com.sunyesle.board_project.board.dto.BoardOrderBy;
+import com.sunyesle.board_project.board.dto.BoardRequest;
+import com.sunyesle.board_project.board.dto.BoardResponse;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginMember;
 import jakarta.validation.Valid;

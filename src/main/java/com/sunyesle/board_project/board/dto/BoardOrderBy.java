@@ -1,4 +1,4 @@
-package com.sunyesle.board_project.board;
+package com.sunyesle.board_project.board.dto;
 
 import org.springframework.data.domain.Sort;
 

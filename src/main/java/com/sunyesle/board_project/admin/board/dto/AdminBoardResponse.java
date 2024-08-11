@@ -1,5 +1,6 @@
-package com.sunyesle.board_project.admin.board;
+package com.sunyesle.board_project.admin.board.dto;
 
+import com.sunyesle.board_project.admin.board.AdminBoardEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

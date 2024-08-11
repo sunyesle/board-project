@@ -1,4 +1,4 @@
-package com.sunyesle.board_project.admin.board;
+package com.sunyesle.board_project.admin.board.dto;
 
 import lombok.Getter;
 

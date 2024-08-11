@@ -1,6 +1,7 @@
 package com.sunyesle.board_project.member;
 
 import com.sunyesle.board_project.common.dto.CreateResponse;
+import com.sunyesle.board_project.member.dto.MemberRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

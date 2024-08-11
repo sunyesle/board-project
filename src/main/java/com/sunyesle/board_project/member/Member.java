@@ -1,6 +1,7 @@
 package com.sunyesle.board_project.member;
 
 import com.sunyesle.board_project.common.entity.BaseEntity;
+import com.sunyesle.board_project.member.dto.MemberRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 
