@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/members").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/members/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/boards/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().hasRole("USER")
                 )
                 .csrf(AbstractHttpConfigurer::disable)
