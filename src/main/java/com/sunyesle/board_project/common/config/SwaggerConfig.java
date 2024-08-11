@@ -1,5 +1,6 @@
 package com.sunyesle.board_project.common.config;
 
+import com.sunyesle.board_project.common.props.BearerTokenProperties;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI openAPI(BearerTokenProperties bearerTokenProperties) {
         final String securitySchemeName = "bearerAuth";
 
         SecurityScheme securityScheme = new SecurityScheme()
@@ -22,6 +26,14 @@ public class SwaggerConfig {
                 .scheme("bearer")
                 .bearerFormat("JWT")
                 .name(securitySchemeName);
+
+        if (bearerTokenProperties.isEnabled() && !bearerTokenProperties.getTokens().isEmpty()) {
+            List<BearerTokenProperties.BearerToken> tokens = bearerTokenProperties.getTokens();
+            String description = tokens.stream()
+                    .map(item -> String.format("**%s** %s", item.name(), item.token()))
+                    .collect(Collectors.joining("\n\n"));
+            securityScheme.description(description);
+        }
 
         return new OpenAPI()
                 .components(new Components()

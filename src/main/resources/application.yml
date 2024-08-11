@@ -31,3 +31,10 @@ springdoc:
   show-login-endpoint: true
   swagger-ui:
     path: "swagger-ui"
+  bearer:
+    enabled: true
+    tokens:
+      - name: 사용자1
+        token: eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzIzMzgzNTE4fQ.91URvvAqb-sMuE8SmWKPE5OywJHHaL59NM_pJN40iJCXJEU4O2MSiKTQ9lUSez_O
+      - name: 관리자1
+        token: eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzIzMzgzNTE4fQ.RCIe8VBr42J-_OKIZzXzQs-bbzaBAfZt9s-mTTA5EAnfgKnlyZjBTefRHjk1WOFo
