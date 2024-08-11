@@ -7,6 +7,7 @@ import com.sunyesle.board_project.common.exception.MemberErrorCode;
 import com.sunyesle.board_project.member.Member;
 import com.sunyesle.board_project.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final Clock clock;
 
+    @Value("${board.modification.period.days}")
+    private int modificationPeriodDays;
+
     @Transactional
     public CreateResponse saveBoard(BoardRequest request, Long loginMemberId) {
         Board board = new Board(loginMemberId, request.getTitle(), request.getContent());
@@ -30,14 +34,22 @@ public class BoardService {
         return new CreateResponse(board.getId());
     }
 
-    public BoardResponse getBoard(Long id) {
+    public BoardDetailResponse getBoard(Long id) {
         Board board = boardRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
 
         Member writer = memberRepository.findById(board.getMemberId())
                 .orElseThrow(() -> new ErrorCodeException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        return BoardResponse.of(board, writer);
+        return new BoardDetailResponse(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getCreatedAt(),
+                board.getCreatedAt().plusDays(modificationPeriodDays),
+                writer.getId(),
+                writer.getName()
+        );
     }
 
     public Page<BoardResponse> getBoards(String title, Pageable pageable) {
@@ -75,7 +87,7 @@ public class BoardService {
         }
 
         // 게시글 작성 후 10일이 지난 경우 예외를 던진다.
-        if (LocalDateTime.now(clock).isAfter(board.getCreatedAt().plusDays(10L))) {
+        if (LocalDateTime.now(clock).isAfter(board.getCreatedAt().plusDays(modificationPeriodDays))) {
             throw new ErrorCodeException(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED);
         }
 

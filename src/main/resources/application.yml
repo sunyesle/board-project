@@ -19,6 +19,10 @@ spring:
 jwt:
   secret: RTUnks7vJZtUtzfKj5KezFroHqk8tkZeBCqnKZaBnSuBLnUCFKDdngrNbDqAPxCe
   expiration-time: 3600000 # 1시간
+board:
+  modification:
+    period:
+      days: 10
 decorator:
   datasource:
     p6spy:
