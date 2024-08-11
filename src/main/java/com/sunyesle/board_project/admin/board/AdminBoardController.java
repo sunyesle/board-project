@@ -1,5 +1,6 @@
 package com.sunyesle.board_project.admin.board;
 
+import com.sunyesle.board_project.common.security.LoginMember;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class AdminBoardController {
             @Valid @RequestBody AdminBoardRequest request
     ) {
         adminBoardService.updateBoard(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
+        adminBoardService.deleteBoard(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

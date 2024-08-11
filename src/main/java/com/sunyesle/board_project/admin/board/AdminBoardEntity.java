@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "BOARD")
@@ -26,5 +28,9 @@ public class AdminBoardEntity extends AdminBaseEntity {
     public void update(AdminBoardRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
+    }
+
+    public void setDeletedAt(LocalDateTime now) {
+        this.deletedAt = now;
     }
 }
