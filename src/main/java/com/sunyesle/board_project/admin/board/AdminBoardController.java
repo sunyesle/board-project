@@ -1,11 +1,10 @@
 package com.sunyesle.board_project.admin.board;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +18,14 @@ public class AdminBoardController {
     public ResponseEntity<List<AdminBoardResponse>> getBoard() {
         List<AdminBoardResponse> boards = adminBoardService.getBoards();
         return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBoard(
+            @PathVariable Long id,
+            @Valid @RequestBody AdminBoardRequest request
+    ) {
+        adminBoardService.updateBoard(id, request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

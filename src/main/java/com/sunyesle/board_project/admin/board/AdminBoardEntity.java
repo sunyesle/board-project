@@ -22,4 +22,9 @@ public class AdminBoardEntity extends AdminBaseEntity {
     private String title;
 
     private String content;
+
+    public void update(AdminBoardRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+    }
 }
