@@ -30,7 +30,7 @@ public class Board extends BaseEntity {
         this.content = content;
     }
 
-    public void setDeletedAt(LocalDateTime deletedAt) {
+    public void delete(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
 

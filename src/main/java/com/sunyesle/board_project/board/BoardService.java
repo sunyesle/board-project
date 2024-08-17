@@ -72,7 +72,7 @@ public class BoardService {
             throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
         }
 
-        board.setDeletedAt(LocalDateTime.now(clock));
+        board.delete(LocalDateTime.now(clock));
     }
 
     @Transactional
