@@ -64,17 +64,12 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long id, Long loginMemberId) {
-        Board board = boardRepository.findById(id)
+        Board board = boardRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new ErrorCodeException(BoardErrorCode.BOARD_NOT_FOUND));
 
         // 로그인한 회원이 게시글의 작성자가 아니면 예외를 던진다.
         if (!board.getMemberId().equals(loginMemberId)) {
             throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
-        }
-
-        // 이미 삭제된 게시글일 경우
-        if (board.getDeletedAt() != null) {
-            return;
         }
 
         board.setDeletedAt(LocalDateTime.now(clock));
