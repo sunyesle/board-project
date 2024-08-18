@@ -49,7 +49,7 @@ public class BoardService {
                 board.getTitle(),
                 board.getContent(),
                 board.getCreatedAt(),
-                board.getCreatedAt().plusDays(modificationPeriodDays),
+                board.getModificationDeadline(),
                 writer.getId(),
                 writer.getName()
         );
@@ -85,8 +85,8 @@ public class BoardService {
             throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
         }
 
-        // 게시글 작성 후 10일이 지난 경우 예외를 던진다.
-        if (LocalDateTime.now(clock).isAfter(board.getCreatedAt().plusDays(modificationPeriodDays))) {
+        // 게시글 수정 가능기간이 지난 경우 예외를 던진다.
+        if (LocalDateTime.now(clock).isAfter(board.getModificationDeadline())) {
             throw new ErrorCodeException(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED);
         }
 

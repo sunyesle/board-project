@@ -2,11 +2,10 @@ package com.sunyesle.board_project;
 
 import com.sunyesle.board_project.board.Board;
 import com.sunyesle.board_project.board.BoardRepository;
-import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.board.BoardService;
+import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.common.exception.BoardErrorCode;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
-import com.sunyesle.board_project.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +29,6 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private Clock clock;
 
     @InjectMocks
@@ -42,26 +38,30 @@ class BoardServiceTest {
     @Test
     void updateBoardTest() {
         // given
-        LocalDateTime createdAt = LocalDateTime.parse("2024-01-01T00:00:00");
-        LocalDateTime now = LocalDateTime.parse("2024-01-11T00:00:01");
+        LocalDateTime now = LocalDateTime.parse("2024-01-01T00:00:01");
+        LocalDateTime modificationDeadline = LocalDateTime.parse("2024-01-01T00:00:00");
+
+        Long boardId = 1L;
+        Long loginMemberId = 1L;
+        BoardRequest request = new BoardRequest("테스트 게시글", "테스트 내용");
 
         Board board = mock(Board.class);
-        given(boardRepository.findByIdAndDeletedAtIsNull(1L))
-                .willReturn(Optional.of(board));
         given(board.getMemberId())
-                .willReturn(100L);
-        given(board.getCreatedAt())
-                .willReturn(createdAt);
+                .willReturn(loginMemberId);
+        given(board.getModificationDeadline())
+                .willReturn(modificationDeadline);
+
+        given(boardRepository.findByIdAndDeletedAtIsNull(boardId))
+                .willReturn(Optional.of(board));
+
         given(clock.instant())
                 .willReturn(now.atZone(ZoneId.systemDefault()).toInstant());
         given(clock.getZone())
                 .willReturn(ZoneId.systemDefault());
 
-        BoardRequest request = new BoardRequest("테스트 게시글", "테스트 내용");
-
         // When
         // Then
-        assertThatThrownBy(() -> boardService.updateBoard(1L, request, 100L))
+        assertThatThrownBy(() -> boardService.updateBoard(boardId, request, loginMemberId))
                 .isInstanceOf(ErrorCodeException.class)
                 .hasMessage(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED.getMessage());
     }

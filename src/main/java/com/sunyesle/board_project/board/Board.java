@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 public class Board extends BaseEntity {
+    private static final int MODIFICATION_PERIOD_DAYS = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
@@ -37,5 +39,9 @@ public class Board extends BaseEntity {
     public void update(BoardRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
+    }
+
+    public LocalDateTime getModificationDeadline() {
+         return this.getCreatedAt().plusDays(MODIFICATION_PERIOD_DAYS);
     }
 }
