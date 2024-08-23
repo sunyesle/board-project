@@ -85,11 +85,6 @@ public class BoardService {
             throw new ErrorCodeException(BoardErrorCode.NOT_BOARD_OWNER);
         }
 
-        // 게시글 수정 가능기간이 지난 경우 예외를 던진다.
-        if (LocalDateTime.now(clock).isAfter(board.getModificationDeadline())) {
-            throw new ErrorCodeException(BoardErrorCode.BOARD_MODIFICATION_PERIOD_EXPIRED);
-        }
-
-        board.update(request);
+        board.update(request, LocalDateTime.now(clock));
     }
 }
