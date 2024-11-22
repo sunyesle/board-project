@@ -3,6 +3,7 @@ package com.sunyesle.board_project.docs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.board.BoardController;
 import com.sunyesle.board_project.board.BoardService;
+import com.sunyesle.board_project.board.dto.BoardDetailResponse;
 import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.docs.support.WithCustomMockUser;
@@ -16,17 +17,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -72,6 +79,31 @@ class BoardDocsTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("게시글 id")
+                        )
+                ));
+    }
+
+    @Test
+    void getBoardTest() throws Exception {
+        BoardDetailResponse response = new BoardDetailResponse(1L, "제목", "내용", LocalDateTime.now(), LocalDateTime.now(), 1L, "작성자 이름");
+        given(boardService.getBoard(any()))
+                .willReturn(response);
+
+        mockMvc.perform(get("/api/v1/boards/{id}", 1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-board",
+                        pathParameters(
+                                parameterWithName("id").description("게시글 id")
+                        ),
+                        responseFields(fieldWithPath("id").description("게시글 id"),
+                                fieldWithPath("title").description("게시글 제목"),
+                                fieldWithPath("content").description("게시글 내용"),
+                                fieldWithPath("createdAt").description("게시글 생성일시"),
+                                fieldWithPath("modificationDeadline").description("게시글 수정가능일시"),
+                                fieldWithPath("writer.id").description("게시글 작성자 아이디"),
+                                fieldWithPath("writer.name").description("게시글 작성자 이름")
                         )
                 ));
     }
