@@ -36,6 +36,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -155,6 +156,28 @@ class BoardDocsTest {
                                 fieldWithPath("page.number").description("현재 페이지 번호"),
                                 fieldWithPath("page.totalElements").description("전체 요소 수"),
                                 fieldWithPath("page.totalPages").description("전체 페이지 수")
+                        )
+                ));
+    }
+
+    @Test
+    @WithCustomMockUser
+    void updateBoardTest() throws Exception {
+        BoardRequest request = new BoardRequest("제목", "내용");
+
+        mockMvc.perform(put("/api/v1/boards/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer {ACCESS_TOKEN}")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("update-board",
+                        pathParameters(
+                                parameterWithName("id").description("게시글 id")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용")
                         )
                 ));
     }
