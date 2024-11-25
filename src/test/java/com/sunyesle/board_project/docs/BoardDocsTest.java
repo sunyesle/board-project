@@ -34,9 +34,7 @@ import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -178,6 +176,20 @@ class BoardDocsTest {
                         requestFields(
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("content").description("내용")
+                        )
+                ));
+    }
+
+    @Test
+    @WithCustomMockUser
+    void deleteBoardTest() throws Exception {
+        mockMvc.perform(delete("/api/v1/boards/{id}", 1L)
+                        .header("Authorization", "Bearer {ACCESS_TOKEN}"))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("delete-board",
+                        pathParameters(
+                                parameterWithName("id").description("게시글 id")
                         )
                 ));
     }
