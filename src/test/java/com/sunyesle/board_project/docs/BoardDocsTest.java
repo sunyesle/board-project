@@ -1,30 +1,19 @@
 package com.sunyesle.board_project.docs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.board.BoardController;
 import com.sunyesle.board_project.board.BoardService;
 import com.sunyesle.board_project.board.dto.BoardDetailResponse;
 import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.board.dto.BoardResponse;
-import com.sunyesle.board_project.common.config.WebConfig;
 import com.sunyesle.board_project.common.dto.CreateResponse;
+import com.sunyesle.board_project.docs.support.BaseRestDocsTest;
 import com.sunyesle.board_project.docs.support.WithCustomMockUser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,38 +22,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BoardController.class)
-@ExtendWith(RestDocumentationExtension.class)
-@AutoConfigureRestDocs
-@Import(WebConfig.class)
-class BoardDocsTest {
+class BoardDocsTest extends BaseRestDocsTest {
+
     @MockBean
     private BoardService boardService;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext,
-               RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
-                .build();
-    }
 
     @WithCustomMockUser
     @Test
@@ -79,7 +46,6 @@ class BoardDocsTest {
                         .header("Authorization", "Bearer {ACCESS_TOKEN}")
                         .content(objectMapper.writeValueAsString(boardRequest)))
                 .andExpect(status().isCreated())
-                .andDo(print())
                 .andDo(document("save-board",
                         requestFields(
                                 fieldWithPath("title").description("제목"),
@@ -100,7 +66,6 @@ class BoardDocsTest {
         mockMvc.perform(get("/api/v1/boards/{id}", 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andDo(document("get-board",
                         pathParameters(
                                 parameterWithName("id").description("게시글 id")
@@ -135,7 +100,6 @@ class BoardDocsTest {
                         .param("pageSize", "10")
                         .param("orderBy", "LATEST"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andDo(document("get-boards",
                         queryParameters(
                                 parameterWithName("title").description("제목 검색 키워드"),
@@ -171,7 +135,6 @@ class BoardDocsTest {
                         .header("Authorization", "Bearer {ACCESS_TOKEN}")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent())
-                .andDo(print())
                 .andDo(document("update-board",
                         pathParameters(
                                 parameterWithName("id").description("게시글 id")
@@ -189,7 +152,6 @@ class BoardDocsTest {
         mockMvc.perform(delete("/api/v1/boards/{id}", 1L)
                         .header("Authorization", "Bearer {ACCESS_TOKEN}"))
                 .andExpect(status().isNoContent())
-                .andDo(print())
                 .andDo(document("delete-board",
                         pathParameters(
                                 parameterWithName("id").description("게시글 id")
