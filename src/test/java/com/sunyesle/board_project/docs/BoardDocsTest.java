@@ -59,7 +59,7 @@ class BoardDocsTest extends BaseRestDocsTest {
 
     @Test
     void getBoardTest() throws Exception {
-        BoardDetailResponse response = new BoardDetailResponse(1L, "제목", "내용", LocalDateTime.now(), LocalDateTime.now(), 1L, "작성자 이름");
+        BoardDetailResponse response = new BoardDetailResponse(1L, "제목", "내용", LocalDateTime.of(2024, 11, 10, 10, 0), LocalDateTime.of(2024, 11, 20, 10, 0), 1L, "작성자 이름");
         given(boardService.getBoard(any()))
                 .willReturn(response);
 
