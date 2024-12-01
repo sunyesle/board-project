@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
+	id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'com.sunyesle'
@@ -50,6 +51,26 @@ tasks.register('copyDocument', Copy) {
 	into file("src/main/resources/static/docs")
 }
 
+openapi3 {
+	setServers([
+			{
+				url = "http://localhost:8080"
+				description = "local server"
+			}
+	])
+	setTitle("Test service API docs")
+	setDescription("OpenApi Specification 3.0 기반의 API 문서입니다")
+	setVersion("0.0.1")
+	setFormat("json")
+}
+
+tasks.register('copyOasToSwagger', Copy) {
+	delete "src/main/resources/static/swagger/openapi3.json"
+	from "${buildDir}/api-spec/openapi3.json"
+	into "src/main/resources/static/swagger/"
+	dependsOn "openapi3"
+}
+
 bootJar {
 	dependsOn copyDocument
 }
@@ -85,6 +106,7 @@ dependencies {
 	// REST Docs
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
