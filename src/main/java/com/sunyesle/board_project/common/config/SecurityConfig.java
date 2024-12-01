@@ -26,6 +26,7 @@ public class SecurityConfig {
     private static final String[] PERMIT_ALL_PATTERNS = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
+            "/docs/**",
     };
 
     private final JwtTokenProvider jwtTokenProvider;
