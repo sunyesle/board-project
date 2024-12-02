@@ -102,10 +102,10 @@ class BoardDocsTest extends BaseRestDocsTest {
                 .andExpect(status().isOk())
                 .andDo(document("get-boards",
                         queryParameters(
-                                parameterWithName("title").description("제목 검색 키워드"),
-                                parameterWithName("pageNumber").description("페이지"),
-                                parameterWithName("pageSize").description("페이지 사이즈"),
-                                parameterWithName("orderBy").description("정렬")
+                                parameterWithName("title").description("제목 검색 키워드").optional(),
+                                parameterWithName("pageNumber").description("페이지").optional(),
+                                parameterWithName("pageSize").description("페이지 사이즈").optional(),
+                                parameterWithName("orderBy").description("정렬").optional()
                         ),
                         responseFields(
                                 fieldWithPath("content").description("게시글 리스트"),
