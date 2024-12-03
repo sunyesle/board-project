@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### REST Docs ###
+/src/main/resources/static/docs/
+/src/main/resources/static/swagger/openapi3.yaml

@@ -1,4 +1,4 @@
-package com.sunyesle.board_project;
+package com.sunyesle.board_project.domain;
 
 import com.sunyesle.board_project.board.Board;
 import com.sunyesle.board_project.board.dto.BoardRequest;

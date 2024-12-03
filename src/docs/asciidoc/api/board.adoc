@@ -1,0 +1,38 @@
+=== 게시글 작성
+
+include::{snippets}/save-board/http-request.adoc[]
+include::{snippets}/save-board/request-fields.adoc[]
+
+include::{snippets}/save-board/http-response.adoc[]
+include::{snippets}/save-board/response-fields.adoc[]
+
+=== 게시글 수정
+
+include::{snippets}/update-board/http-request.adoc[]
+include::{snippets}/update-board/path-parameters.adoc[]
+include::{snippets}/update-board/request-fields.adoc[]
+
+include::{snippets}/update-board/http-response.adoc[]
+
+=== 게시글 삭제
+
+include::{snippets}/delete-board/http-request.adoc[]
+include::{snippets}/delete-board/path-parameters.adoc[]
+
+include::{snippets}/delete-board/http-response.adoc[]
+
+=== 게시글 상세 조회
+
+include::{snippets}/get-board/http-request.adoc[]
+include::{snippets}/get-board/path-parameters.adoc[]
+
+include::{snippets}/get-board/http-response.adoc[]
+include::{snippets}/get-board/response-fields.adoc[]
+
+=== 게시글 목록 조회
+
+include::{snippets}/get-boards/http-request.adoc[]
+include::{snippets}/get-boards/query-parameters.adoc[]
+
+include::{snippets}/get-boards/http-response.adoc[]
+include::{snippets}/get-boards/response-fields.adoc[]

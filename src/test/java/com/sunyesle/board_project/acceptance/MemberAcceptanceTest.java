@@ -1,4 +1,4 @@
-package com.sunyesle.board_project;
+package com.sunyesle.board_project.acceptance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.common.dto.CreateResponse;
