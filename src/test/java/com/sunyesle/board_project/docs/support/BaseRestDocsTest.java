@@ -3,6 +3,7 @@ package com.sunyesle.board_project.docs.support;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.common.config.WebConfig;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -17,6 +18,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+@Tag("restdocs")
 @ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureRestDocs
 @Import(WebConfig.class)

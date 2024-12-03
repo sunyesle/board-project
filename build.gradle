@@ -32,16 +32,25 @@ ext {
 
 test {
 	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+tasks.register("restDocsTest", Test) {
+	outputs.dir snippetsDir
+	useJUnitPlatform {
+		includeTags("restdocs")
+	}
 }
 
 asciidoctor {
+	dependsOn restDocsTest
+
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
-	sources{
+	sources {
 		include("**/index.adoc")
 	}
 	baseDirFollowsSourceFile()
-	dependsOn test
 }
 
 tasks.register('copyDocument', Copy) {
@@ -49,28 +58,34 @@ tasks.register('copyDocument', Copy) {
 
 	from file("${asciidoctor.outputDir}")
 	into file("src/main/resources/static/docs")
+
+	doFirst {
+		delete file("src/main/resources/static/docs")
+	}
 }
 
 openapi3 {
-	setServers([
+	servers = [
 			{
 				url = "http://localhost:8080"
 				description = "local server"
 			}
-	])
-	setTitle("Test service API docs")
-	setDescription("OpenApi Specification 3.0 기반의 API 문서입니다")
-	setVersion("0.0.1")
-	setFormat("yaml")
+	]
+	title = "Test service API docs"
+	description = "OpenApi Specification 3.0 기반의 API 문서입니다"
+	version = "0.0.1"
+	format = "yaml"
 }
 
 tasks.register('copyOasToSwagger', Copy) {
-	delete "src/main/resources/static/swagger/openapi3.yaml"
-	from "${buildDir}/api-spec/openapi3.yaml"
-	into "src/main/resources/static/swagger/"
 	dependsOn "openapi3"
 
+	from "${buildDir}/api-spec/openapi3.yaml"
+	into "src/main/resources/static/swagger/"
+
 	doFirst {
+		delete "src/main/resources/static/swagger/openapi3.yaml"
+
 		// 빌드 디렉토리 yaml 파일에 보안 스키마 추가
 		def openapi3File = file("$buildDir/api-spec/openapi3.yaml")
 
@@ -91,10 +106,6 @@ tasks.register('copyOasToSwagger', Copy) {
 			println "Warning: openapi3.yaml not found at ${openapi3File.path}"
 		}
 	}
-}
-
-bootJar {
-	dependsOn copyDocument
 }
 
 dependencies {
@@ -134,8 +145,4 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-orgjson:0.12.6'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
