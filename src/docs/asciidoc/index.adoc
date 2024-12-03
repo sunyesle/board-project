@@ -10,3 +10,6 @@
 
 == Board API
 include::api/board.adoc[]
+
+== Member API
+include::api/member.adoc[]

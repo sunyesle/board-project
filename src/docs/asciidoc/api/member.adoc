@@ -1,0 +1,16 @@
+=== 회원가입
+
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+
+include::{snippets}/signup/http-response.adoc[]
+include::{snippets}/signup/response-fields.adoc[]
+
+=== 로그인
+
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+
+include::{snippets}/login/http-response.adoc[]
+include::{snippets}/login/response-headers.adoc[]
+include::{snippets}/login/response-fields.adoc[]
