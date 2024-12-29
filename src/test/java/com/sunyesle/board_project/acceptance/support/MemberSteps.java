@@ -13,26 +13,26 @@ public class MemberSteps {
     @SneakyThrows
     public static ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
         return RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/members")
                     .contentType(ContentType.JSON)
                     .body(memberRequest)
                 .when()
                     .post()
-                .then().log().all()
+                .then()
                     .extract();
     }
 
     @SneakyThrows
     public static ExtractableResponse<Response> 로그인_요청(LoginRequest loginRequest) {
         return RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/members/login")
                     .contentType(ContentType.JSON)
                     .body(loginRequest)
                 .when()
                     .post()
-                .then().log().all()
+                .then()
                     .extract();
     }
 }

@@ -108,7 +108,7 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards")
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
@@ -118,7 +118,7 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
                     .queryParam("pageSize", pageSize)
                 .when()
                     .get()
-                .then().log().all()
+                .then()
                     .extract();
 
         // then
@@ -142,13 +142,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards")
                     .contentType(ContentType.JSON)
                     .body(boardRequest)
                 .when()
                     .post()
-                .then().log().all()
+                .then()
                     .extract();
 
         // then
@@ -169,14 +169,14 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards/" + savedBoardId)
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                     .body(updateBoardRequest)
                 .when()
                     .put()
-                .then().log().all()
+                .then()
                     .extract();
 
         // then
@@ -194,13 +194,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards/" + savedBoardId)
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .when()
                     .delete()
-                .then().log().all()
+                .then()
                     .extract();
 
         // then

@@ -13,26 +13,26 @@ public class BoardSteps {
     @SneakyThrows
     public static ExtractableResponse<Response> 게시글_작성_요청(BoardRequest boardRequest, String token) {
         return RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards")
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(boardRequest)
                 .when()
                     .post()
-                .then().log().all()
+                .then()
                     .extract();
     }
 
     @SneakyThrows
      public static ExtractableResponse<Response> 게시글_조회_요청(Long savedBoardId) {
         return RestAssured
-                .given().log().all()
+                .given()
                     .basePath("/api/v1/boards/" + savedBoardId)
                     .contentType(ContentType.JSON)
                 .when()
                     .get()
-                .then().log().all()
+                .then()
                     .extract();
     }
 }
