@@ -110,7 +110,6 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         ExtractableResponse<Response> response = RestAssured
                 .given()
                     .basePath("/api/v1/boards")
-                    .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                     .queryParam("title", "게시글")
                     .queryParam("orderBy", BoardOrderBy.OLDEST)
@@ -196,7 +195,6 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         ExtractableResponse<Response> response = RestAssured
                 .given()
                     .basePath("/api/v1/boards/" + savedBoardId)
-                    .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .when()
                     .delete()

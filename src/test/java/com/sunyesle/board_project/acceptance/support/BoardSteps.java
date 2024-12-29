@@ -29,7 +29,6 @@ public class BoardSteps {
         return RestAssured
                 .given()
                     .basePath("/api/v1/boards/" + savedBoardId)
-                    .contentType(ContentType.JSON)
                 .when()
                     .get()
                 .then()
