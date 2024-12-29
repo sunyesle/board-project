@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberAcceptanceTest extends BaseAcceptanceTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @BeforeEach
     @Override

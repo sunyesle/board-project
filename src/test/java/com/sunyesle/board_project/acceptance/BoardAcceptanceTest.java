@@ -37,13 +37,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
     private final String phoneNumber = "010-0000-0000";
     private final String password = "Test12345!@";
 
-    String accessToken;
+    private String accessToken;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    private BoardRepository boardRepository;
 
     @BeforeEach
     @Override
