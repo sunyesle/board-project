@@ -1,6 +1,5 @@
 package com.sunyesle.board_project.acceptance.support;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.dto.MemberRequest;
 import io.restassured.RestAssured;
@@ -10,7 +9,6 @@ import io.restassured.response.Response;
 import lombok.SneakyThrows;
 
 public class MemberSteps {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
     public static ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
@@ -18,7 +16,7 @@ public class MemberSteps {
                 .given().log().all()
                     .basePath("/api/v1/members")
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(memberRequest))
+                    .body(memberRequest)
                 .when()
                     .post()
                 .then().log().all()
@@ -31,7 +29,7 @@ public class MemberSteps {
                 .given().log().all()
                     .basePath("/api/v1/members/login")
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(loginRequest))
+                    .body(loginRequest)
                 .when()
                     .post()
                 .then().log().all()

@@ -1,7 +1,8 @@
 package com.sunyesle.board_project.acceptance;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sunyesle.board_project.board.*;
+import com.sunyesle.board_project.acceptance.support.BaseAcceptanceTest;
+import com.sunyesle.board_project.board.Board;
+import com.sunyesle.board_project.board.BoardRepository;
 import com.sunyesle.board_project.board.dto.BoardOrderBy;
 import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.board.dto.BoardResponse;
@@ -9,7 +10,6 @@ import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.dto.MemberRequest;
-import com.sunyesle.board_project.acceptance.support.BaseAcceptanceTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
@@ -44,9 +44,6 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
     @Autowired
     BoardRepository boardRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @BeforeEach
     @Override
@@ -148,7 +145,7 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
                 .given().log().all()
                     .basePath("/api/v1/boards")
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(boardRequest))
+                    .body(boardRequest)
                 .when()
                     .post()
                 .then().log().all()
@@ -176,7 +173,7 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
                     .basePath("/api/v1/boards/" + savedBoardId)
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .body(objectMapper.writeValueAsString(updateBoardRequest))
+                    .body(updateBoardRequest)
                 .when()
                     .put()
                 .then().log().all()
