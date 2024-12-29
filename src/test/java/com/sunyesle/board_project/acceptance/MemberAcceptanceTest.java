@@ -6,7 +6,7 @@ import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.Member;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.dto.MemberRequest;
-import com.sunyesle.board_project.support.BaseAcceptanceTest;
+import com.sunyesle.board_project.acceptance.support.BaseAcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +17,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
-import static com.sunyesle.board_project.support.MemberSteps.로그인_요청;
-import static com.sunyesle.board_project.support.MemberSteps.회원가입_요청;
+import static com.sunyesle.board_project.acceptance.support.MemberSteps.로그인_요청;
+import static com.sunyesle.board_project.acceptance.support.MemberSteps.회원가입_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberAcceptanceTest extends BaseAcceptanceTest {

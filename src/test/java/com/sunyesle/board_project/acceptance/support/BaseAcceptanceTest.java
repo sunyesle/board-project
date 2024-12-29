@@ -1,4 +1,4 @@
-package com.sunyesle.board_project.support;
+package com.sunyesle.board_project.acceptance.support;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
