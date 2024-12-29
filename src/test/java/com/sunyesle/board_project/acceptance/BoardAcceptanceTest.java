@@ -109,14 +109,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
-                    .basePath("/api/v1/boards")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                     .queryParam("title", "게시글")
                     .queryParam("orderBy", BoardOrderBy.OLDEST)
                     .queryParam("pageNumber", 0)
                     .queryParam("pageSize", pageSize)
                 .when()
-                    .get()
+                    .get("/api/v1/boards")
                 .then()
                     .extract();
 
@@ -142,11 +141,10 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
-                    .basePath("/api/v1/boards")
                     .contentType(ContentType.JSON)
                     .body(boardRequest)
                 .when()
-                    .post()
+                    .post("/api/v1/boards")
                 .then()
                     .extract();
 
@@ -169,12 +167,11 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
-                    .basePath("/api/v1/boards/" + savedBoardId)
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                     .body(updateBoardRequest)
                 .when()
-                    .put()
+                    .put("/api/v1/boards/{boardId}", savedBoardId)
                 .then()
                     .extract();
 
@@ -194,10 +191,9 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
-                    .basePath("/api/v1/boards/" + savedBoardId)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .when()
-                    .delete()
+                    .delete("/api/v1/boards/{boardId}", savedBoardId)
                 .then()
                     .extract();
 

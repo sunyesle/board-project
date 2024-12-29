@@ -14,11 +14,10 @@ public class MemberSteps {
     public static ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
         return RestAssured
                 .given()
-                    .basePath("/api/v1/members")
                     .contentType(ContentType.JSON)
                     .body(memberRequest)
                 .when()
-                    .post()
+                    .post("/api/v1/members")
                 .then()
                     .extract();
     }
@@ -27,11 +26,10 @@ public class MemberSteps {
     public static ExtractableResponse<Response> 로그인_요청(LoginRequest loginRequest) {
         return RestAssured
                 .given()
-                    .basePath("/api/v1/members/login")
                     .contentType(ContentType.JSON)
                     .body(loginRequest)
                 .when()
-                    .post()
+                    .post("/api/v1/members/login")
                 .then()
                     .extract();
     }
