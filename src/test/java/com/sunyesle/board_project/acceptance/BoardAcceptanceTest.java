@@ -1,7 +1,8 @@
 package com.sunyesle.board_project.acceptance;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sunyesle.board_project.board.*;
+import com.sunyesle.board_project.acceptance.support.BaseAcceptanceTest;
+import com.sunyesle.board_project.board.Board;
+import com.sunyesle.board_project.board.BoardRepository;
 import com.sunyesle.board_project.board.dto.BoardOrderBy;
 import com.sunyesle.board_project.board.dto.BoardRequest;
 import com.sunyesle.board_project.board.dto.BoardResponse;
@@ -9,7 +10,6 @@ import com.sunyesle.board_project.common.dto.CreateResponse;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.MemberRepository;
 import com.sunyesle.board_project.member.dto.MemberRequest;
-import com.sunyesle.board_project.support.BaseAcceptanceTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
@@ -25,10 +25,10 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sunyesle.board_project.support.BoardSteps.게시글_작성_요청;
-import static com.sunyesle.board_project.support.BoardSteps.게시글_조회_요청;
-import static com.sunyesle.board_project.support.MemberSteps.로그인_요청;
-import static com.sunyesle.board_project.support.MemberSteps.회원가입_요청;
+import static com.sunyesle.board_project.acceptance.support.BoardSteps.게시글_작성_요청;
+import static com.sunyesle.board_project.acceptance.support.BoardSteps.게시글_조회_요청;
+import static com.sunyesle.board_project.acceptance.support.MemberSteps.로그인_요청;
+import static com.sunyesle.board_project.acceptance.support.MemberSteps.회원가입_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BoardAcceptanceTest extends BaseAcceptanceTest {
@@ -37,16 +37,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
     private final String phoneNumber = "010-0000-0000";
     private final String password = "Test12345!@";
 
-    String accessToken;
+    private String accessToken;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
-    BoardRepository boardRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
+    private BoardRepository boardRepository;
 
     @BeforeEach
     @Override
@@ -111,17 +108,15 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards")
-                    .contentType(ContentType.JSON)
+                .given()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                     .queryParam("title", "게시글")
                     .queryParam("orderBy", BoardOrderBy.OLDEST)
                     .queryParam("pageNumber", 0)
                     .queryParam("pageSize", pageSize)
                 .when()
-                    .get()
-                .then().log().all()
+                    .get("/api/v1/boards")
+                .then()
                     .extract();
 
         // then
@@ -145,13 +140,12 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards")
+                .given()
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(boardRequest))
+                    .body(boardRequest)
                 .when()
-                    .post()
-                .then().log().all()
+                    .post("/api/v1/boards")
+                .then()
                     .extract();
 
         // then
@@ -172,14 +166,13 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards/" + savedBoardId)
+                .given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .body(objectMapper.writeValueAsString(updateBoardRequest))
+                    .body(updateBoardRequest)
                 .when()
-                    .put()
-                .then().log().all()
+                    .put("/api/v1/boards/{boardId}", savedBoardId)
+                .then()
                     .extract();
 
         // then
@@ -197,13 +190,11 @@ class BoardAcceptanceTest extends BaseAcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards/" + savedBoardId)
-                    .contentType(ContentType.JSON)
+                .given()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .when()
-                    .delete()
-                .then().log().all()
+                    .delete("/api/v1/boards/{boardId}", savedBoardId)
+                .then()
                     .extract();
 
         // then

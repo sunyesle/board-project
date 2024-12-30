@@ -1,6 +1,5 @@
-package com.sunyesle.board_project.support;
+package com.sunyesle.board_project.acceptance.support;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.common.security.LoginRequest;
 import com.sunyesle.board_project.member.dto.MemberRequest;
 import io.restassured.RestAssured;
@@ -10,31 +9,28 @@ import io.restassured.response.Response;
 import lombok.SneakyThrows;
 
 public class MemberSteps {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
     public static ExtractableResponse<Response> 회원가입_요청(MemberRequest memberRequest) {
         return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/members")
+                .given()
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(memberRequest))
+                    .body(memberRequest)
                 .when()
-                    .post()
-                .then().log().all()
+                    .post("/api/v1/members")
+                .then()
                     .extract();
     }
 
     @SneakyThrows
     public static ExtractableResponse<Response> 로그인_요청(LoginRequest loginRequest) {
         return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/members/login")
+                .given()
                     .contentType(ContentType.JSON)
-                    .body(objectMapper.writeValueAsString(loginRequest))
+                    .body(loginRequest)
                 .when()
-                    .post()
-                .then().log().all()
+                    .post("/api/v1/members/login")
+                .then()
                     .extract();
     }
 }

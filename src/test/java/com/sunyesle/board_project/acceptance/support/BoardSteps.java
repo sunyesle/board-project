@@ -1,6 +1,5 @@
-package com.sunyesle.board_project.support;
+package com.sunyesle.board_project.acceptance.support;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunyesle.board_project.board.dto.BoardRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -10,31 +9,26 @@ import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 
 public class BoardSteps {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
     public static ExtractableResponse<Response> 게시글_작성_요청(BoardRequest boardRequest, String token) {
         return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards")
+                .given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .body(objectMapper.writeValueAsString(boardRequest))
+                    .body(boardRequest)
                 .when()
-                    .post()
-                .then().log().all()
+                    .post("/api/v1/boards")
+                .then()
                     .extract();
     }
 
     @SneakyThrows
      public static ExtractableResponse<Response> 게시글_조회_요청(Long savedBoardId) {
         return RestAssured
-                .given().log().all()
-                    .basePath("/api/v1/boards/" + savedBoardId)
-                    .contentType(ContentType.JSON)
                 .when()
-                    .get()
-                .then().log().all()
+                    .get("/api/v1/boards/{boardId}", savedBoardId)
+                .then()
                     .extract();
     }
 }
