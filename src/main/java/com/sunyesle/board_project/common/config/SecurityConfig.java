@@ -28,6 +28,7 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/docs/**",
             "/swagger/**",
+            "/files/**",
     };
 
     private final JwtTokenProvider jwtTokenProvider;
