@@ -23,6 +23,8 @@ board:
   modification:
     period:
       days: 10
+file:
+  base-dir: D:/dev/files/
 decorator:
   datasource:
     p6spy:

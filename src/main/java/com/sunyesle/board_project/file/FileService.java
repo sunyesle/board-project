@@ -3,6 +3,7 @@ package com.sunyesle.board_project.file;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
 import com.sunyesle.board_project.common.exception.FileErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,14 +20,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
-    private static final String UPLOAD_DIR = "D:/dev/images/";
+    @Value("${file.base-dir}")
+    private String baseDir;
 
     private final FileRepository fileRepository;
 
     @Transactional
     public ImageFileResponse storeImageFile(MultipartFile file) {
         // 저장 폴더 생성
-        File uploadDir = new File(UPLOAD_DIR);
+        String imageDir = baseDir + "images/";
+        File uploadDir = new File(imageDir);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
@@ -37,7 +40,7 @@ public class FileService {
             throw new ErrorCodeException(FileErrorCode.INVALID_FILE_NAME);
         }
         String newFileName = generateFileName(StringUtils.cleanPath(originalFilename));
-        File destinationFile = new File(UPLOAD_DIR + newFileName);
+        File destinationFile = new File(imageDir + newFileName);
 
         // 파일 저장
         try {
