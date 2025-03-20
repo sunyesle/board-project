@@ -27,36 +27,17 @@ public class FileService {
 
     @Transactional
     public ImageFileResponse storeImageFile(MultipartFile file) {
-        // 저장 폴더 생성
+        // 이미지 파일 디렉터리 경로
         String imageDir = baseDir + "images/";
-        File uploadDir = new File(imageDir);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
 
-        // 파일명 변환
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null) {
-            throw new ErrorCodeException(FileErrorCode.INVALID_FILE_NAME);
-        }
-        String newFileName = generateFileName(StringUtils.cleanPath(originalFilename));
-        File destinationFile = new File(imageDir + newFileName);
+        // 저장 폴더 생성
+        createDir(imageDir);
 
         // 파일 저장
-        try {
-            file.transferTo(destinationFile);
-        } catch (IOException e) {
-            throw new ErrorCodeException(FileErrorCode.FILE_STORE_FAILED);
-        }
+        String fileName = saveFile(file, imageDir);
 
         // 파일 정보 DB 저장
-        FileEntity fileEntity = new FileEntity(
-                newFileName,
-                "/files/images/" + newFileName,
-                file.getSize(),
-                file.getContentType()
-        );
-        fileRepository.save(fileEntity);
+        FileEntity fileEntity = saveFileMetadata(file, fileName);
 
         return new ImageFileResponse(fileEntity.getId(),
                 fileEntity.getFileName(),
@@ -67,6 +48,40 @@ public class FileService {
         );
     }
 
+    /**
+     * 지정된 경로에 디렉터리가 없으면 새로 생성한다.
+     */
+    private void createDir(String uploadDir) {
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
+    /**
+     * 파일을 저장하고 파일명을 반환한다.
+     */
+    private String saveFile(MultipartFile file, String uploadDir) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new ErrorCodeException(FileErrorCode.INVALID_FILE_NAME);
+        }
+
+        String newFileName = generateFileName(StringUtils.cleanPath(originalFilename));
+        File destinationFile = new File(uploadDir + newFileName);
+
+        try {
+            file.transferTo(destinationFile);
+        } catch (IOException e) {
+            throw new ErrorCodeException(FileErrorCode.FILE_STORE_FAILED);
+        }
+
+        return newFileName;
+    }
+
+    /**
+     * 고유한 파일 이름을 생성한다.
+     */
     private String generateFileName(String originalFilename) {
         String extension = "";
         int dotIndex = originalFilename.lastIndexOf(".");
@@ -76,5 +91,19 @@ public class FileService {
 
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
                 + "_" + UUID.randomUUID() + extension;
+    }
+
+    /**
+     * 파일 정보를 DB에 저장한다.
+     */
+    private FileEntity saveFileMetadata(MultipartFile file, String fileName) {
+        FileEntity fileEntity = new FileEntity(
+                fileName,
+                "/files/images/" + fileName,
+                file.getSize(),
+                file.getContentType()
+        );
+        fileRepository.save(fileEntity);
+        return fileEntity;
     }
 }
