@@ -13,12 +13,15 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
 import java.util.UUID;
 
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class FileService {
+
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png", "gif", "bmp", "webp");
 
     @Value("${file.base-dir}")
     private String baseDir;
@@ -27,6 +30,8 @@ public class FileService {
 
     @Transactional
     public ImageFileResponse storeImageFile(MultipartFile file) {
+        validateImageFile(file);
+
         // 이미지 파일 디렉터리 경로
         String imageDir = baseDir + "images/";
 
@@ -49,6 +54,26 @@ public class FileService {
     }
 
     /**
+     * 이미지 파일 형식을 검증한다.
+     */
+    private void validateImageFile(MultipartFile file) {
+        String extension = getFileExtension(file.getOriginalFilename());
+        if(!ALLOWED_EXTENSIONS.contains(extension)){
+            throw new ErrorCodeException(FileErrorCode.INVALID_IMAGE_FORMAT);
+        }
+    }
+
+    /**
+     * 파일 이름에서 파일 확장자를 추출한다.
+     */
+    private String getFileExtension(String fileName) {
+        if(fileName == null || !fileName.contains(".")) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    /**
      * 지정된 경로에 디렉터리가 없으면 새로 생성한다.
      */
     private void createDir(String uploadDir) {
@@ -59,7 +84,7 @@ public class FileService {
     }
 
     /**
-     * 파일을 저장하고 파일명을 반환한다.
+     * 파일을 저장하고 파일 이름을 반환한다.
      */
     private String saveFile(MultipartFile file, String uploadDir) {
         String originalFilename = file.getOriginalFilename();
@@ -83,14 +108,8 @@ public class FileService {
      * 고유한 파일 이름을 생성한다.
      */
     private String generateFileName(String originalFilename) {
-        String extension = "";
-        int dotIndex = originalFilename.lastIndexOf(".");
-        if (dotIndex > 0) {
-            extension = originalFilename.substring(dotIndex);
-        }
-
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
-                + "_" + UUID.randomUUID() + extension;
+                + "_" + UUID.randomUUID() + "." + getFileExtension(originalFilename);
     }
 
     /**

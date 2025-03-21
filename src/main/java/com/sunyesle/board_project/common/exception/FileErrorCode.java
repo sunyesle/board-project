@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum FileErrorCode implements ErrorCode {
     INVALID_FILE_NAME(HttpStatus.BAD_REQUEST, "올바르지 않은 파일명입니다."),
+    INVALID_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "지원되지 않는 이미지 형식입니다."),
     FILE_STORE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
