@@ -3,6 +3,7 @@ package com.sunyesle.board_project.file;
 import com.sunyesle.board_project.common.exception.ErrorCodeException;
 import com.sunyesle.board_project.common.exception.FileErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ import java.util.UUID;
 public class FileService {
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png", "gif", "bmp", "webp");
+    private static final Set<String> ALLOWED_MIME_TYPES = Set.of("image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp");
+
+    private final Tika tika = new Tika();
 
     @Value("${file.base-dir}")
     private String baseDir;
@@ -57,8 +61,21 @@ public class FileService {
      * 이미지 파일 형식을 검증한다.
      */
     private void validateImageFile(MultipartFile file) {
+        // 확장자 검증
         String extension = getFileExtension(file.getOriginalFilename());
-        if(!ALLOWED_EXTENSIONS.contains(extension)){
+        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            throw new ErrorCodeException(FileErrorCode.INVALID_IMAGE_FORMAT);
+        }
+
+        // MIME 타입 검증
+        String mimeType;
+        try {
+            mimeType = tika.detect(file.getInputStream());
+        } catch (IOException e) {
+            throw new ErrorCodeException(FileErrorCode.INVALID_IMAGE_FORMAT);
+        }
+
+        if (!ALLOWED_MIME_TYPES.contains(mimeType)) {
             throw new ErrorCodeException(FileErrorCode.INVALID_IMAGE_FORMAT);
         }
     }
@@ -67,7 +84,7 @@ public class FileService {
      * 파일 이름에서 파일 확장자를 추출한다.
      */
     private String getFileExtension(String fileName) {
-        if(fileName == null || !fileName.contains(".")) {
+        if (fileName == null || !fileName.contains(".")) {
             return "";
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
