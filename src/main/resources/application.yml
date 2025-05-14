@@ -16,6 +16,10 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 30MB
 jwt:
   secret: RTUnks7vJZtUtzfKj5KezFroHqk8tkZeBCqnKZaBnSuBLnUCFKDdngrNbDqAPxCe
   expiration-time: 3600000 # 1시간
@@ -23,6 +27,8 @@ board:
   modification:
     period:
       days: 10
+file:
+  base-dir: D:/dev/files/
 decorator:
   datasource:
     p6spy:
